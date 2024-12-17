@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 
-class EmbeddingsInterface(ABC):
+class Embeddings(ABC):
     @abstractmethod
     def get_embedding(self, word: str) -> List[float]:
         """
