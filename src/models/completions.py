@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class CompletionInterface(ABC):
+class Completion(ABC):
     @abstractmethod
     def get_completion(self, prompt: str) -> str:
         """
