@@ -1,0 +1,330 @@
+Die Liste der Vögel Österreichs führt die Arten der Vögel (Aves) auf, deren Vorkommen in Österreich beobachtet worden sind.
+Grundlage für die Liste ist die von Hans-Martin Berg et al. bearbeitete Artenliste der Vögel Österreichs mit dem Stand vom Dezember 2021. Die taxonomische Reihenfolge und die Nomenklatur entsprechen der in der genannten Quelle.
+Die Liste enthält nur Arten, deren Nachweise durch die Avifaunistische Kommission (AfK) Österreich anerkannt wurden. Außerdem werden nur die Arten berücksichtigt, deren Beobachtung auf Feststellung wildlebender Tiere zurückzuführen ist sowie diejenigen, die eingebürgert sind, das heißt, die ursprünglich in anderen Regionen vorkommen, die sich jedoch inzwischen durch Fortpflanzung längerfristig etabliert haben (Neozoen). Insgesamt umfasst die Liste 443 Arten, davon sind 216 Arten regelmäßige Brutvögel, weitere 89 Arten treten regelmäßig auf, ohne zu brüten, und 102 Arten gelten als Ausnahmeerscheinungen.
+Die unter Status eingetragenen Bezeichnungen weisen auf die Art des Vorkommens hin. Die Angabe „regelmäßiger Brutvogel“ kennzeichnet Arten, die sich in Österreich in mindestens acht der Jahre von 2012 bis 2021 fortgepflanzt haben. Bei diesen Arten wird von weiteren Statusangaben, die sich auf den Zeitraum außerhalb der Brutzeit beziehen, abgesehen. Als „unregelmäßiger Brutvogel“ gekennzeichnete Arten haben seit 1800 in mindestens drei Jahren in Österreich gebrütet, davon muss mindestens eines im Zeitraum von 2012 bis 2021 liegen. Mit der Angabe „eingebürgert“ handelt es sich dabei um vom Menschen absichtlich oder unabsichtlich eingeführte Arten (Neozoen), die sich in Österreich durch Fortpflanzung etabliert haben. Die Angabe „ausnahmsweise Brutvogel“ beschreibt Arten, die von 1800 bis 2021 in höchstens drei Jahren in Österreich gebrütet haben. Bei der Angabe „ehemaliger Brutvogel“ gab es vor 2012 ein regelmäßiges oder unregelmäßiges Brutvorkommen der betreffenden Art in Österreich, zwischen 2012 und 2021 wurden jedoch keine Bruten mehr nachgewiesen. Als „Durchzügler“ sind Arten gekennzeichnet, die Österreich regelmäßig als Zugvögel durchqueren, als „Sommergast“ bzw. „Wintergast“ solche, die sich im Sommer bzw. Winter in Österreich aufhalten, ohne dort zu brüten. Bei Arten, die mit der Angabe „unregelmäßiger Gast“ versehen sind, handelt es sich um Arten, die in Österreich insgesamt mindestens fünfzehnmal sowie von 2002 bis 2021 in höchstens fünfzehn verschiedenen Jahren, jedoch mindestens fünfmal nachgewiesen wurden. Die Angabe „Ausnahmeerscheinung“ kennzeichnet Arten, die nur selten in Österreich festgestellt wurden. Dies trifft zu, wenn insgesamt weniger als fünfzehn Nachweise oder von 2002 bis 2021 höchstens fünf Nachweise erbracht wurden.
+Die unter RL-Status verzeichneten Abkürzungen verweisen auf den Status in der Roten Liste der Brutvögel Österreichs in der 5. Fassung von 2017 und haben folgende Bedeutung: RE – regional ausgestorben (regionally extinct), CR – vom Aussterben bedroht (critically endangered), EN – stark gefährdet (endangered), VU – gefährdet (vulnerable), NT – Gefährdung droht bzw. Vorwarnliste (near threatened), LC – nicht gefährdet (least concern).
+
+
+== Anseriformes – Entenverwandte ==
+
+
+=== Anatidae – Entenvögel ===
+
+
+== Galliformes – Hühnervögel ==
+
+
+=== Phasianidae – Fasanenverwandte ===
+
+
+== Caprimulgiformes – Nachtschwalbenvögel ==
+
+
+=== Caprimulgidae – Nachtschwalben ===
+
+
+== Apodiformes – Seglervögel ==
+
+
+=== Apodidae – Segler ===
+
+
+== Otidiformes – Trappen ==
+
+
+=== Otididae – Trappen ===
+
+
+== Cuculiformes – Kuckucke ==
+
+
+=== Cuculidae – Kuckucke ===
+
+
+== Pterocliformes – Flughühner ==
+
+
+=== Pteroclidae – Flughühner ===
+
+
+== Columbiformes – Tauben ==
+
+
+=== Columbidae – Tauben ===
+
+
+== Gruiformes – Kranichvögel ==
+
+
+=== Rallidae – Rallen ===
+
+
+=== Gruidae – Kraniche ===
+
+
+== Podicipediformes – Lappentaucher ==
+
+
+=== Podicipedidae – Lappentaucher ===
+
+
+== Phoenicopteriformes – Flamingos ==
+
+
+=== Phoenicopteridae – Flamingos ===
+
+
+== Charadriiformes – Regenpfeifervögel ==
+
+
+=== Burhinidae – Triele ===
+
+
+=== Haematopodidae – Austernfischer ===
+
+
+=== Recurvirostridae – Säbelschnäblerverwandte ===
+
+
+=== Charadriidae – Regenpfeiferverwandte ===
+
+
+=== Scolopacidae – Schnepfenverwandte ===
+
+
+=== Glareolidae – Brachschwalbenverwandte ===
+
+
+=== Laridae – Möwenverwandte ===
+
+
+=== Stercorariidae – Raubmöwen ===
+
+
+=== Alcidae – Alke ===
+
+
+== Gaviiformes – Seetaucher ==
+
+
+=== Gaviidae – Seetaucher ===
+
+
+== Procellariiformes – Röhrennasen ==
+
+
+=== Hydrobatidae – Wellenläufer ===
+
+
+=== Procellariidae – Sturmvögel ===
+
+
+== Ciconiiformes – Störche ==
+
+
+=== Ciconiidae – Störche ===
+
+
+== Suliformes – Ruderfüßer ==
+
+
+=== Sulidae – Tölpel ===
+
+
+=== Phalacrocoracidae – Scharben ===
+
+
+== Pelecaniformes – Pelikanvögel ==
+
+
+=== Threskiornithidae – Ibisse ===
+
+
+=== Ardeidae – Reiher ===
+
+
+=== Pelecanidae – Pelikane ===
+
+
+== Accipitriformes – Greifvögel ==
+
+
+=== Pandionidae – Fischadler ===
+
+
+=== Accipitridae – Habichtverwandte ===
+
+
+== Strigiformes – Eulen ==
+
+
+=== Tytonidae – Schleiereulen ===
+
+
+=== Strigidae – Eulen ===
+
+
+== Bucerotiformes – Hornvögel ==
+
+
+=== Upupidae – Wiedehopfe ===
+
+
+== Coraciiformes – Rackenvögel ==
+
+
+=== Coraciidae – Racken ===
+
+
+=== Alcedinidae – Eisvögel ===
+
+
+=== Meropidae – Spinte ===
+
+
+== Piciformes – Spechtvögel ==
+
+
+=== Picidae – Spechte ===
+
+
+== Falconiformes – Falken ==
+
+
+=== Falconidae – Falken ===
+
+
+== Psittaciformes – Papageien ==
+
+
+=== Psittacidae – Papageien ===
+
+
+== Passeriformes – Sperlingsvögel ==
+
+
+=== Laniidae – Würger ===
+
+
+=== Oriolidae – Pirole ===
+
+
+=== Corvidae – Krähenverwandte ===
+
+
+=== Bombycillidae – Seidenschwänze ===
+
+
+=== Paridae – Meisen ===
+
+
+=== Remizidae – Beutelmeisen ===
+
+
+=== Panuridae – Bartmeisen ===
+
+
+=== Alaudidae – Lerchen ===
+
+
+=== Hirundinidae – Schwalben ===
+
+
+=== Cettiidae – Seidensängerverwandte ===
+
+
+=== Aegithalidae – Schwanzmeisen ===
+
+
+=== Phylloscopidae – Laubsänger ===
+
+
+=== Acrocephalidae – Rohrsängerverwandte ===
+
+
+=== Locustellidae – Schwirlverwandte ===
+
+
+=== Cisticolidae – Halmsänger ===
+
+
+=== Sylviidae – Grasmückenverwandte ===
+
+
+=== Regulidae – Goldhähnchen ===
+
+
+=== Troglodytidae – Zaunkönige ===
+
+
+=== Sittidae – Kleiber ===
+
+
+=== Tichodromidae – Mauerläufer ===
+
+
+=== Certhiidae – Baumläufer ===
+
+
+=== Sturnidae – Starenverwandte ===
+
+
+=== Turdidae – Drosseln ===
+
+
+=== Muscicapidae – Schnäpperverwandte ===
+
+
+=== Cinclidae – Wasseramseln ===
+
+
+=== Passeridae – Sperlinge ===
+
+
+=== Prunellidae – Braunellen ===
+
+
+=== Motacillidae – Stelzenverwandte ===
+
+
+=== Fringillidae – Finkenverwandte ===
+
+
+=== Calcariidae – Tundraammern ===
+
+
+=== Emberizidae – Ammern ===
+
+
+== Anmerkungen ==
+
+
+== Siehe auch ==
+Avifauna Mitteleuropas
+Liste der Amphibien und Reptilien Österreichs
+Liste der Fische Österreichs
+Liste der Säugetiere Österreichs
+Liste der Heuschrecken Österreichs
+Liste der Köcherfliegen Österreichs
+Liste der Libellen Österreichs
+Liste der Netzflüglerartigen und Schnabelfliegen Österreichs
+Liste der Tagfalter Österreichs
+Liste der Nachtfalter Österreichs
+Liste der Skorpione Österreichs
+Liste der Flusskrebse Österreichs
+Liste der Urzeitkrebse Österreichs
+Liste von Wasserkäfern Österreichs
+Liste der Weberknechte Österreichs
+Liste der Weichtiere Österreichs
+Liste der Zikaden Österreichs
+Liste vom Aussterben bedrohter Arten Österreichs
+
+
+== Weblinks ==
+
+Denis Lepage: Avibase – Bird Checklists of the World: Austria. In: avibase.bsc-eoc.org, abgerufen am 31. Januar 2023.
+Austria auf iNaturalist.org, abgerufen am 31. Januar 2023.
+Austria auf datazone.birdlife.org, abgerufen am 31. Januar 2023.
+
+
+== Einzelnachweise ==
