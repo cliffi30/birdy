@@ -1,8 +1,11 @@
+from chromadb import PersistentClient
 from typing import Dict, List
-
+from uuid import uuid4
 from chromadb import Client, Settings
-
-from src.embeddings.embedding_storage import EmbeddingStorage
+from langchain_chroma import Chroma
+from embeddings.embedding_storage import EmbeddingStorage
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores.utils import filter_complex_metadata
 
 
 class ChromaDBEmbeddingStorage(EmbeddingStorage):
@@ -11,11 +14,21 @@ class ChromaDBEmbeddingStorage(EmbeddingStorage):
             collection_name: str = "birds",
             chunk_size: int = 1000,
             chunk_overlap: int = 200,
-            persist_directory: str = "./chroma_db"
+            persist_directory: str = "chroma_db/"
     ):
+        self.collection_name=collection_name
+        self.EMBED_MODEL = HuggingFaceEmbeddings(model_name="distiluse-base-multilingual-cased-v1")
+
         # Initialize ChromaDB
-        self.client = Client(Settings(persist_directory=persist_directory))
+        self.client = PersistentClient(path=persist_directory)
         self.collection = self.client.get_or_create_collection(name=collection_name)
+
+        # Initalize Vector Store
+        self.vector_store = Chroma(
+            collection_name=collection_name,
+            client= self.client,
+            embedding_function=self.EMBED_MODEL
+            )
 
         # Chunking parameters
         self.chunk_size = chunk_size
@@ -24,6 +37,16 @@ class ChromaDBEmbeddingStorage(EmbeddingStorage):
     def save_embeddings(self, embeddings_dict):
         for text, vector in embeddings_dict.items():
             self.collection.upsert(text, vector)
+
+    def add_documents(self, documents):
+        uuids = [str(uuid4()) for _ in range(len(documents))]
+        self.vector_store.add_documents(filter_complex_metadata(documents), ids=uuids)
+        collection = self.client.get_or_create_collection(self.collection_name)
+        print(collection.peek())
+
+    def query_vectorstore(self, text):
+        result = self.vector_store.similarity_search(query=text[0], k=3)
+        return result
 
     def get_all_embeddings(self) -> Dict[str, List[float]]:
         embeddings_dict = {}
