@@ -1,13 +1,14 @@
-import numpy as np
-import pathlib
-import os
 from openai import OpenAI
-from sklearn.metrics.pairwise import cosine_similarity
 
 from config import Config
 from data.birds_csv_loader import load_birds_csv
 from embeddings.chromadb_embedding_storage import ChromaDBEmbeddingStorage
 import textSplitter as txSplitter
+
+# Pipelin welche die verschiedenen Textdateien zu jedem Vogel aus dem Datenordner liest und
+# daraus dann Embeddings produziert. Die Embeddings werden in der ChromaDb mit der Erweiterung von langChain
+# direkt abgespeichert.
+# Muss nur 1x ausgeführt werden. Danach kann mit Main_Query.py direkt die Abfrage gemacht werden.
 
 def main():
     # initialize the config
@@ -22,16 +23,18 @@ def main():
     # create the embeddings
     birds = df.copy()
 
+    # Initialisieren vom TextSplitter
     splitter = txSplitter.LangChainTextSplitter()
 
     documents = []
 
+    # Textsplitter ausführen
     for index, row in birds.iterrows():
         document = splitter.GetRecursiveCharacterChunksFromTextFile(bird_name=row['Vogelname'])
         documents.append(document)
 
     # Variante mit OpenAI Embedding
-
+    
     # # Create the embeddings
     # openai_embeddings = OpenaiEmbeddings(client)
     # embeddings = []
@@ -56,9 +59,10 @@ def main():
 
     # Variante mit loaken Embedding
 
-    # Create the embedding storage (CSV or ChromaDB)
+    # Create the embedding storage - ChromaDB
     embedding_storage = ChromaDBEmbeddingStorage("BirdsV1_lokal_hf_embeeded")
 
+    # Embeddings in der Db Speichern
     for document in documents:
         # Save the embeddings in given storage
         embedding_storage.add_documents(documents=document)
