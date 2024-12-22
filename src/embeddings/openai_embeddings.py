@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-from src.embeddings.embeddings import Embeddings
+from embeddings.embeddings import Embeddings
 
 
 # generates the embeddings using the OpenAI API

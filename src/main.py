@@ -2,11 +2,11 @@ import numpy as np
 from openai import OpenAI
 from sklearn.metrics.pairwise import cosine_similarity
 
-from src.config import Config
-from src.data.birds_csv_loader import load_birds_csv
-from src.embeddings.chromadb_embedding_storage import ChromaDBEmbeddingStorage
-from src.embeddings.openai_embeddings import OpenaiEmbeddings
-from src.models.openai_completions import OpenaiCompletions
+from config import Config
+from data.birds_csv_loader import load_birds_csv
+from embeddings.chromadb_embedding_storage import ChromaDBEmbeddingStorage
+from embeddings.openai_embeddings import OpenaiEmbeddings
+from models.openai_completions import OpenaiCompletions
 
 
 def main():
@@ -20,8 +20,7 @@ def main():
     df = load_birds_csv().head(10)
 
     # create the embeddings
-    openai_embeddings = OpenaiEmbeddings(client)
-    birds = df.copy()
+    birds = df[-2:].copy(2)
     # Combine the columns into a single text (to be used for embeddings)
     birds['combined_text'] = (
         'Name:' + birds['Name'] + ', ' +
@@ -38,7 +37,7 @@ def main():
     embeddings_dict = {}
     for index, row in birds.iterrows():
         text = row['combined_text']
-        embedding = openai_embeddings.get_embedding(text)
+        embedding = row['embeddings']
         embeddings_dict[text] = embedding
         birds.at[index, 'embeddings'] = embedding
 

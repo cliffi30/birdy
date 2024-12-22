@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-from src.models.completions import Completion
+from models.completions import Completion
 
 
 class OpenaiCompletions(Completion):
@@ -17,7 +17,9 @@ class OpenaiCompletions(Completion):
                 - Base your answers only on the provided content
                 - Cite sources when possible using (Source: filename, Page: X)
                 - If information isn't in the content, acknowledge this
-                - Be precise and factual'''
+                - If the promt includes a question to specify a bird use the name of the birds from the context
+                - Be precise and factual
+                - Answer in German'''
 
     def get_completion(self, prompt: str) -> str:
         completions = self.client.chat.completions.create(
