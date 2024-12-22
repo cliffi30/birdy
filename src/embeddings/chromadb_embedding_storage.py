@@ -38,6 +38,7 @@ class ChromaDBEmbeddingStorage(EmbeddingStorage):
         for text, vector in embeddings_dict.items():
             self.collection.upsert(text, vector)
 
+    # Speichert LangChain Documents in der Datenbank als Embeddings ab
     def add_documents(self, documents):
         uuids = [str(uuid4()) for _ in range(len(documents))]
         self.vector_store.add_documents(filter_complex_metadata(documents), ids=uuids)
