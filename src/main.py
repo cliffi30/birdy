@@ -1,3 +1,5 @@
+import argparse
+import sys
 import numpy as np
 from openai import OpenAI
 from sklearn.metrics.pairwise import cosine_similarity
@@ -7,9 +9,10 @@ from data.birds_csv_loader import load_birds_csv
 from embeddings.chromadb_embedding_storage import ChromaDBEmbeddingStorage
 from embeddings.openai_embeddings import OpenaiEmbeddings
 from models.openai_completions import OpenaiCompletions
+from models.ollama_completions import OllamaCompletions
 
 
-def main():
+def main(useLlamaCompletions: bool = False, useOpenAiCompletions: bool = True, useLlamaEmbeddings: bool = False, useOpenAiEmbeddings: bool = True):
     # initialize the config
     config = Config()
 
@@ -58,7 +61,10 @@ def main():
         'What are the characteristics of the Eastern Bluebird?',
     ]
 
-    openai_completions = OpenaiCompletions(client)
+    if useOpenAiCompletions == "true":
+        openai_completions = OpenaiCompletions(client)
+    if useLlamaCompletions == "true":
+        ollama_completions = OllamaCompletions(None)
     for question in questions:
         question_embedding = openai_embeddings.get_embedding(question)
 
@@ -70,12 +76,46 @@ def main():
 
         # Generate the response using the most relevant context
         context = most_similar_text
-        prompt = f"{context}\n\nQuestion: {question}\nAnswer:"
-        response = openai_completions.get_completion(prompt)
-        print(f"Question: {question}")
-        print(f"Response: {response}")
-        print("--------------------")
+        if useOpenAiCompletions == "true":
+            response = openai_completions.get_completion(context, question)
+            print("--------------------")
+            print("Model: OpenAI")
+            print(f"Context: {context}")
+            print(f"Question: {question}")
+            print(f"Response: {response}")
+            print("--------------------")
+        if useLlamaCompletions == "true":
+            response = ollama_completions.get_completion(context, question)
+            print("--------------------")
+            print("Model: Ollama")
+            print(f"Context: {context}")
+            print(f"Question: {question}")
+            print(f"Response: {response}")
+            print("--------------------")
 
 
 if __name__ == "__main__":
-    main()
+    # Initialize parser
+    parser = argparse.ArgumentParser(description="Birdy - A bird shop assistant")
+
+    # Adding optional argument
+    parser.add_argument("-lc", "--useLlamaCompletions", required=False, default="false", help = "true to use llama with ollama to create completions")
+    parser.add_argument("-oac", "--useOpenAiCompletions", required=False, default="true", help = "true to use OpenAI to create completions")
+    parser.add_argument("-le", "--useLlamaEmbeddings", required=False, default="false", help = "true to use llama with ollama to create embeddings")
+    parser.add_argument("-oae", "--useOpenAiEmbeddings", required=False, default="true", help = "true to use OpenAI to create embeddings")
+
+    # Read arguments from command line
+    args = parser.parse_args()
+
+    print(f'useLlamaCompletions: {args.useLlamaCompletions}')
+    print(f'useOpenAiCompletions: {args.useOpenAiCompletions}')
+    print(f'useLlamaEmbeddings: {args.useLlamaEmbeddings}')
+    print(f'useOpenAiEmbeddings: {args.useOpenAiEmbeddings}')
+
+    if (args.useLlamaCompletions == "false" and args.useOpenAiCompletions == "false"):
+        print("At least one of the completion models should be enabled")
+        sys.exit(1)
+    if (args.useLlamaEmbeddings == "false" and args.useOpenAiEmbeddings == "false"):
+        print("At least one of the embedding models should be enabled")
+        sys.exit(2)
+    main(useLlamaCompletions=args.useLlamaCompletions, useOpenAiCompletions=args.useOpenAiCompletions, useLlamaEmbeddings=args.useLlamaEmbeddings, useOpenAiEmbeddings=args.useOpenAiEmbeddings)

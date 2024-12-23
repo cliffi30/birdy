@@ -21,7 +21,8 @@ class OpenaiCompletions(Completion):
                 - Be precise and factual
                 - Answer in German'''
 
-    def get_completion(self, prompt: str) -> str:
+    def get_completion(self, context: str, question: str) -> str:
+        prompt = f"{context}\n\nQuestion: {question}\nAnswer:"
         completions = self.client.chat.completions.create(
                 model=self.model,
                 temperature=self.temperature,
