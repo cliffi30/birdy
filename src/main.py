@@ -1,5 +1,6 @@
 import argparse
 import sys
+
 import numpy as np
 from openai import OpenAI
 from sklearn.metrics.pairwise import cosine_similarity
@@ -8,8 +9,10 @@ from config import Config
 from data.birds_csv_loader import load_birds_csv
 from embeddings.chromadb_embedding_storage import ChromaDBEmbeddingStorage
 from embeddings.openai_embeddings import OpenaiEmbeddings
-from models.openai_completions import OpenaiCompletions
+from embeddings.transformer_embeddings import TransformerEmbeddings
 from models.ollama_completions import OllamaCompletions
+from models.openai_completions import OpenaiCompletions
+from utils.sentiment_analyzer import SentimentAnalyzer
 
 
 def main(useLlamaCompletions: bool = False, useOpenAiCompletions: bool = True, useLlamaEmbeddings: bool = False, useOpenAiEmbeddings: bool = True):
@@ -36,7 +39,12 @@ def main(useLlamaCompletions: bool = False, useOpenAiCompletions: bool = True, u
 
     # Create the embeddings
     openai_embeddings = OpenaiEmbeddings(client)
-    birds['embeddings'] = birds['combined_text'].apply(lambda x: openai_embeddings.get_embedding(x))
+    transformer_embeddings = TransformerEmbeddings()
+
+    # set the embeddings we want to use
+    embeddings_variant = openai_embeddings
+
+    birds['embeddings'] = birds['combined_text'].apply(lambda x: embeddings_variant.get_embedding(x))
     embeddings_dict = {}
     for index, row in birds.iterrows():
         text = row['combined_text']
@@ -59,14 +67,22 @@ def main(useLlamaCompletions: bool = False, useOpenAiCompletions: bool = True, u
 
     questions = [
         'What are the characteristics of the Eastern Bluebird?',
+        'Hi, You told me that the Eastern Bluebird is a small bird, but now the bird is huge! Why are you lying?',
+        "Ich bin richtig wütend. Ich habe einen Vogel gekauft und er ist nach wenigen Tagen bereits gestorben. Ich möchte Schadenersatz! Der seelische Schmerz ist unerträglich.",
+        "Ich muss schon sagen, die Qualität dieses Vogels mit dem langen roten Schnabel ist wirklich hervorragend. Es ist zwar etwas knapp für ihn im Käfig. Ich bin sehr zufrieden.",
     ]
 
     if useOpenAiCompletions == "true":
         openai_completions = OpenaiCompletions(client)
     if useLlamaCompletions == "true":
         ollama_completions = OllamaCompletions(None)
+
+    sentiment_analyzer = SentimentAnalyzer()
     for question in questions:
-        question_embedding = openai_embeddings.get_embedding(question)
+        # Calculate the sentiment of the question
+        sentiment = sentiment_analyzer.analyze_sentiment(question)
+
+        question_embedding = embeddings_variant.get_embedding(question)
 
         # Compute cosine similarity between the question and stored embeddings
         similarities = cosine_similarity([question_embedding], stored_embeddings)[0]
@@ -76,22 +92,22 @@ def main(useLlamaCompletions: bool = False, useOpenAiCompletions: bool = True, u
 
         # Generate the response using the most relevant context
         context = most_similar_text
+        response = ""
         if useOpenAiCompletions == "true":
-            response = openai_completions.get_completion(context, question)
+            response = openai_completions.get_completion(context, question, sentiment['label'], sentiment['score'])
             print("--------------------")
             print("Model: OpenAI")
-            print(f"Context: {context}")
-            print(f"Question: {question}")
-            print(f"Response: {response}")
-            print("--------------------")
         if useLlamaCompletions == "true":
             response = ollama_completions.get_completion(context, question)
             print("--------------------")
             print("Model: Ollama")
-            print(f"Context: {context}")
-            print(f"Question: {question}")
-            print(f"Response: {response}")
-            print("--------------------")
+
+        print(f"Context: {context}")
+        print(f"Question: {question}")
+        print(f"Response: {response}")
+        print("--------------------")
+
+
 
 
 if __name__ == "__main__":

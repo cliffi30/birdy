@@ -1,11 +1,12 @@
-from chromadb import PersistentClient
 from typing import Dict, List
 from uuid import uuid4
-from chromadb import Client, Settings
+
+from chromadb import PersistentClient
 from langchain_chroma import Chroma
-from embeddings.embedding_storage import EmbeddingStorage
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores.utils import filter_complex_metadata
+from langchain_huggingface import HuggingFaceEmbeddings
+
+from src.embeddings.embedding_storage import EmbeddingStorage
 
 
 class ChromaDBEmbeddingStorage(EmbeddingStorage):
@@ -16,19 +17,19 @@ class ChromaDBEmbeddingStorage(EmbeddingStorage):
             chunk_overlap: int = 200,
             persist_directory: str = "chroma_db/"
     ):
-        self.collection_name=collection_name
-        self.EMBED_MODEL = HuggingFaceEmbeddings(model_name="distiluse-base-multilingual-cased-v1")
+        self.collection_name = collection_name
+        self.embed_model = HuggingFaceEmbeddings(model_name="distiluse-base-multilingual-cased-v1")
 
         # Initialize ChromaDB
         self.client = PersistentClient(path=persist_directory)
         self.collection = self.client.get_or_create_collection(name=collection_name)
 
-        # Initalize Vector Store
+        # Initialize Vector Store
         self.vector_store = Chroma(
             collection_name=collection_name,
-            client= self.client,
-            embedding_function=self.EMBED_MODEL
-            )
+            client=self.client,
+            embedding_function=self.embed_model
+        )
 
         # Chunking parameters
         self.chunk_size = chunk_size

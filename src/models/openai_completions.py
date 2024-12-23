@@ -1,6 +1,5 @@
-from openai import OpenAI
-
 from models.completions import Completion
+from openai import OpenAI
 
 
 class OpenaiCompletions(Completion):
@@ -17,12 +16,14 @@ class OpenaiCompletions(Completion):
                 - Base your answers only on the provided content
                 - Cite sources when possible using (Source: filename, Page: X)
                 - If information isn't in the content, acknowledge this
-                - If the promt includes a question to specify a bird use the name of the birds from the context
-                - Be precise and factual
-                - Answer in German'''
+                - If the prompt includes a question to specify a bird use the name of the birds from the context
+                - Be precise and factual'''
 
-    def get_completion(self, context: str, question: str) -> str:
-        prompt = f"{context}\n\nQuestion: {question}\nAnswer:"
+    def get_completion(self, context: str, question: str, sentiment_label: str = None, sentiment_score: float = None) -> str:
+        prompt = f"Context:{context}\n\nQuestion: {question}\nAnswer:"
+        if sentiment_label is not None and sentiment_score is not None:
+            # provide the sentiment information to the model
+            prompt = f"The user's sentiment is '{sentiment_label}' with a confidence score of {sentiment_score}.\n{prompt}"
         completions = self.client.chat.completions.create(
                 model=self.model,
                 temperature=self.temperature,

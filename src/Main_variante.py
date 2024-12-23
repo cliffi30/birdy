@@ -3,7 +3,8 @@ from openai import OpenAI
 from config import Config
 from data.birds_csv_loader import load_birds_csv
 from embeddings.chromadb_embedding_storage import ChromaDBEmbeddingStorage
-import textSplitter as txSplitter
+from utils import text_splitter as txSplitter
+
 
 # Pipelin welche die verschiedenen Textdateien zu jedem Vogel aus dem Datenordner liest und
 # daraus dann Embeddings produziert. Die Embeddings werden in der ChromaDb mit der Erweiterung von langChain
@@ -30,7 +31,7 @@ def main():
 
     # Textsplitter ausführen
     for index, row in birds.iterrows():
-        document = splitter.GetRecursiveCharacterChunksFromTextFile(bird_name=row['Vogelname'])
+        document = splitter.get_recursive_character_chunks_from_text_file(bird_name=row['Vogelname'])
         documents.append(document)
 
     # Variante mit OpenAI Embedding
