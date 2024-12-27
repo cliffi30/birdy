@@ -1,9 +1,9 @@
 import os
 import pathlib
 
-from langchain.document_loaders import PyPDFLoader
 from langchain.schema import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.document_loaders import TextLoader
 
 
@@ -18,7 +18,6 @@ class LangChainTextSplitter:
             chunk_size=1000, 
             chunk_overlap=150,
             add_start_index=True)
-      pass
     
     def get_simple_chunks_from_pdf(self, file_name):
       #build FilePath

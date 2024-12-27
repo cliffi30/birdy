@@ -47,7 +47,7 @@ class ChromaDBEmbeddingStorage(EmbeddingStorage):
         print(collection.peek())
 
     def query_vectorstore(self, text):
-        result = self.vector_store.similarity_search(query=text[0], k=3)
+        result = self.vector_store.similarity_search(query=text, k=3)
         return result
 
     def get_all_embeddings(self) -> Dict[str, List[float]]:

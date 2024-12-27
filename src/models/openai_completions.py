@@ -9,7 +9,7 @@ class OpenaiCompletions(Completion):
         self.temperature = temperature
         self.max_tokens = max_tokens
 
-        self.system_prompt = '''You are a sales assistant in a birds shop. Follow these guidelines:
+        self.system_prompt = '''You are a sales assistant with the name Horst Adler in a birds shop. Follow these guidelines:
                 - Respond like in a mail conversation
                 - Respond in the same language as the user's query
                 - Be polite and helpful
