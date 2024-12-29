@@ -13,13 +13,24 @@ from embeddings.openai_embeddings import OpenaiEmbeddings
 from embeddings.transformer_embeddings import TransformerEmbeddings
 from models.ollama_completions import OllamaCompletions
 from models.openai_completions import OpenaiCompletions
+from src.embeddings.neo4j_embedding_storage import Neo4jEmbeddingStorage
+from src.utils.embeddings_helper import build_birds_embeddings
 from utils.sentiment_analyzer import SentimentAnalyzer
 
 
 def main(use_llama_completions: bool = False, use_open_ai_completions: bool = True, use_llama_embeddings: bool = False,
-         use_open_ai_embeddings: bool = True, use_chrome_embeddings: bool = True):
+         use_open_ai_embeddings: bool = True, use_chrome_embeddings: bool = True,
+         recreate_embeddings: bool = True):
     # initialize the config
     config = Config()
+
+    # Prepare the Neo4j storage
+    neo4j_storage = Neo4jEmbeddingStorage(
+        uri=config.neo4j_uri,
+        user=config.neo4j_user,
+        password=config.neo4j_password,
+        use_openai=True
+    )
 
     # create a client
     client = OpenAI(api_key=config.openai_api_key)
@@ -39,6 +50,9 @@ def main(use_llama_completions: bool = False, use_open_ai_completions: bool = Tr
             'Size (cm):' + birds['Size (cm)'].astype(str)
     )
 
+    if recreate_embeddings is True:
+        build_birds_embeddings(use_chrome_embeddings=True)
+
     # Create the embeddings
     openai_embeddings = OpenaiEmbeddings(client)
     transformer_embeddings = TransformerEmbeddings()
@@ -56,7 +70,8 @@ def main(use_llama_completions: bool = False, use_open_ai_completions: bool = Tr
 
     # Create the embedding storage (CSV or ChromaDB)
     # embedding_storage = CSVEmbeddingStorage('embeddings.csv')
-    embedding_storage = ChromaDBEmbeddingStorage()
+    # embedding_storage = ChromaDBEmbeddingStorage()
+    embedding_storage = Neo4jEmbeddingStorage(config.neo4j_uri, config.neo4j_user, config.neo4j_password)
 
     # Save the embeddings in given storage
     embedding_storage.save_embeddings(embeddings_dict)
@@ -86,7 +101,7 @@ def main(use_llama_completions: bool = False, use_open_ai_completions: bool = Tr
         sentiment = sentiment_analyzer.analyze_sentiment(question)
 
         context = ""
-        if use_chrome_embeddings == "true":
+        if use_chrome_embeddings is True:
             # Query the ChromaDB for the most relevant context (uses wikipedia data)
             query_result = chrome_db_client.query_vectorstore(question)
             for result in query_result:
@@ -134,6 +149,8 @@ if __name__ == "__main__":
                         help="true to use OpenAI to create embeddings")
     parser.add_argument("-wiki", "--useWikipediaData", required=False, default="true",
                         help="true to use Wikipedia data")
+    parser.add_argument("-re", "--recreateEmbeddings", required=False, default="true",
+                        help="true to recreate the embeddings")
 
     # Read arguments from command line
     args = parser.parse_args()
@@ -142,6 +159,7 @@ if __name__ == "__main__":
     print(f'useOpenAiCompletions: {args.useOpenAiCompletions}')
     print(f'useLlamaEmbeddings: {args.useLlamaEmbeddings}')
     print(f'useOpenAiEmbeddings: {args.useOpenAiEmbeddings}')
+    print(f'recreateEmbeddings: {args.recreateEmbeddings}')
 
     if (args.useLlamaCompletions == "false" and args.useOpenAiCompletions == "false"):
         print("At least one of the completion models should be enabled")
@@ -151,4 +169,4 @@ if __name__ == "__main__":
         sys.exit(2)
     main(use_llama_completions=args.useLlamaCompletions, use_open_ai_completions=args.useOpenAiCompletions,
          use_llama_embeddings=args.useLlamaEmbeddings, use_open_ai_embeddings=args.useOpenAiEmbeddings,
-         use_chrome_embeddings=args.useWikipediaData)
+         use_chrome_embeddings=args.useWikipediaData, recreate_embeddings=args.recreateEmbeddings)
