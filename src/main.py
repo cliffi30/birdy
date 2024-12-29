@@ -16,7 +16,8 @@ from models.openai_completions import OpenaiCompletions
 from utils.sentiment_analyzer import SentimentAnalyzer
 
 
-def main(use_llama_completions: bool = False, use_open_ai_completions: bool = True, use_llama_embeddings: bool = False, use_open_ai_embeddings: bool = True, use_chrome_embeddings: bool = True):
+def main(use_llama_completions: bool = False, use_open_ai_completions: bool = True, use_llama_embeddings: bool = False,
+         use_open_ai_embeddings: bool = True, use_chrome_embeddings: bool = True):
     # initialize the config
     config = Config()
 
@@ -30,12 +31,12 @@ def main(use_llama_completions: bool = False, use_open_ai_completions: bool = Tr
     birds = df[-2:].copy(2)
     # Combine the columns into a single text (to be used for embeddings)
     birds['combined_text'] = (
-        'Name:' + birds['Name'] + ', ' +
-        'Breeding Time:' + birds['Breeding Time'] + ', ' +
-        'Region:' + birds['Region'] + ', ' +
-        'Characteristics:' + birds['Characteristics'] + ', ' +
-        'Weight (kg):' + birds['Weight (kg)'].astype(str) + ', ' +
-        'Size (cm):' + birds['Size (cm)'].astype(str)
+            'Name:' + birds['Name'] + ', ' +
+            'Breeding Time:' + birds['Breeding Time'] + ', ' +
+            'Region:' + birds['Region'] + ', ' +
+            'Characteristics:' + birds['Characteristics'] + ', ' +
+            'Weight (kg):' + birds['Weight (kg)'].astype(str) + ', ' +
+            'Size (cm):' + birds['Size (cm)'].astype(str)
     )
 
     # Create the embeddings
@@ -103,22 +104,19 @@ def main(use_llama_completions: bool = False, use_open_ai_completions: bool = Tr
             context = most_similar_text
 
         response = ""
+        print("--------------------")
         if use_open_ai_completions == "true":
             response = openai_completions.get_completion(context, question, sentiment['label'], sentiment['score'])
-            print("--------------------")
             print("Model: OpenAI")
         if use_llama_completions == "true":
             response = ollama_completions.get_completion(context, question)
-            print("--------------------")
             print("Model: Ollama")
 
         print(f"Sentiment: {sentiment}")
         print(f"Context: {context}")
         print(f"Question: {question}")
         print(f"Response: {response}")
-        print("--------------------")
-
-
+        print("--------------------\n\n")
 
 
 if __name__ == "__main__":
@@ -126,11 +124,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Birdy - A bird shop assistant")
 
     # Adding optional argument
-    parser.add_argument("-lc", "--useLlamaCompletions", required=False, default="false", help = "true to use llama with ollama to create completions")
-    parser.add_argument("-oac", "--useOpenAiCompletions", required=False, default="true", help = "true to use OpenAI to create completions")
-    parser.add_argument("-le", "--useLlamaEmbeddings", required=False, default="false", help = "true to use llama with ollama to create embeddings")
-    parser.add_argument("-oae", "--useOpenAiEmbeddings", required=False, default="true", help = "true to use OpenAI to create embeddings")
-    parser.add_argument("-wiki", "--useWikipediaData", required=False, default="true", help = "true to use Wikipedia data")
+    parser.add_argument("-lc", "--useLlamaCompletions", required=False, default="false",
+                        help="true to use llama with ollama to create completions")
+    parser.add_argument("-oac", "--useOpenAiCompletions", required=False, default="true",
+                        help="true to use OpenAI to create completions")
+    parser.add_argument("-le", "--useLlamaEmbeddings", required=False, default="false",
+                        help="true to use llama with ollama to create embeddings")
+    parser.add_argument("-oae", "--useOpenAiEmbeddings", required=False, default="true",
+                        help="true to use OpenAI to create embeddings")
+    parser.add_argument("-wiki", "--useWikipediaData", required=False, default="true",
+                        help="true to use Wikipedia data")
 
     # Read arguments from command line
     args = parser.parse_args()
@@ -146,4 +149,6 @@ if __name__ == "__main__":
     if (args.useLlamaEmbeddings == "false" and args.useOpenAiEmbeddings == "false"):
         print("At least one of the embedding models should be enabled")
         sys.exit(2)
-    main(use_llama_completions=args.useLlamaCompletions, use_open_ai_completions=args.useOpenAiCompletions, use_llama_embeddings=args.useLlamaEmbeddings, use_open_ai_embeddings=args.useOpenAiEmbeddings, use_chrome_embeddings=args.useWikipediaData)
+    main(use_llama_completions=args.useLlamaCompletions, use_open_ai_completions=args.useOpenAiCompletions,
+         use_llama_embeddings=args.useLlamaEmbeddings, use_open_ai_embeddings=args.useOpenAiEmbeddings,
+         use_chrome_embeddings=args.useWikipediaData)

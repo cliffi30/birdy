@@ -2,9 +2,9 @@ from data.birds_csv_loader import load_birds_csv
 from embeddings.chromadb_embedding_storage import ChromaDBEmbeddingStorage
 from utils.text_splitter import LangChainTextSplitter
 
-chroma_embedding_storage_name = "BirdsV1_lokal_hf_embeeded"
+chroma_embedding_storage_name = "BirdsV1_lokal_hf_embedded"
 
-# Pipelin welche die verschiedenen Textdateien zu jedem Vogel aus dem Datenordner liest und
+# Pipeline welche die verschiedenen Textdateien zu jedem Vogel aus dem Datenordner liest und
 # daraus dann Embeddings produziert. Die Embeddings werden in der ChromaDb mit der Erweiterung von langChain
 # direkt abgespeichert.
 # Muss nur 1x ausgeführt werden. Danach kann mit Main_Query.py direkt die Abfrage gemacht werden.
