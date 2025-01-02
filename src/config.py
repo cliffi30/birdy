@@ -9,4 +9,3 @@ class Config:
             self.neo4j_uri = self.config['neo4j']['uri']
             self.neo4j_user = self.config['neo4j']['user']
             self.neo4j_password = self.config['neo4j']['password']
-            self.neo4j_index_name = self.config['neo4j']['index_name']
