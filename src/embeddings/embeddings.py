@@ -1,17 +1,23 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import Tuple, Optional
 
 
 class Embeddings(ABC):
     @abstractmethod
-    def get_embedding(self, word: str) -> List[float]:
+    def get_embedding(self, text: str) -> Tuple[Optional[str], Optional[float]]:
         """
         Retrieves the embedding for a given word.
 
         Args:
-            word (str): The word to retrieve the embedding for.
+            text (str): The word to retrieve the embedding for.
 
         Returns:
-            List[float]: The embedding vector for the word.
+            Tuple[Optional[str], Optional[float]]: The document and its score.
+        """
+        pass
+
+    def get_langchain_embedder(self):
+        """
+        Returns the langchain embedder.
         """
         pass

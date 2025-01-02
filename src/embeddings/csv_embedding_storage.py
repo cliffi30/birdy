@@ -1,12 +1,14 @@
 import csv
 from typing import Dict, List
 
-from src.embeddings.embedding_storage import EmbeddingStorage
+from embeddings.embedding_storage import EmbeddingStorage
+from langchain.schema import Document
+from langchain_core.embeddings import Embeddings
 
 
 # Stores the embeddings in a CSV file.
 class CSVEmbeddingStorage(EmbeddingStorage):
-    def __init__(self, csv_file: str):
+    def __init__(self, csv_file: str, embedder: Embeddings):
         self.csv_file = csv_file
         self.embeddings = self._load_embeddings()
 
@@ -23,7 +25,7 @@ class CSVEmbeddingStorage(EmbeddingStorage):
             pass  # File doesn't exist yet
         return embeddings
 
-    def save_embeddings(self, embeddings_dict: Dict[str, List[float]]):
+    def save_embeddings(self, embeddings_dict: Dict[str, List[Document]]):
         with open(self.csv_file, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
             for text, vector in embeddings_dict.items():
@@ -32,5 +34,5 @@ class CSVEmbeddingStorage(EmbeddingStorage):
     def get_all_embeddings(self) -> Dict[str, List[float]]:
         return list(self.embeddings)
 
-    def get_embedding(self, text: str) -> List[float]:
+    def get_embedding(self, text: str, n_results: int) -> list[Document]:
         return self.embeddings.get(text, [])

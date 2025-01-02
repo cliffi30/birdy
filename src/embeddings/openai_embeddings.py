@@ -1,6 +1,6 @@
-from openai import OpenAI
-
 from embeddings.embeddings import Embeddings
+from langchain_community.embeddings import OpenAIEmbeddings
+from openai import OpenAI
 
 
 # generates the embeddings using the OpenAI API
@@ -16,3 +16,6 @@ class OpenaiEmbeddings(Embeddings):
             encoding_format="float"
         )
         return embeddings.data[0].embedding
+
+    def get_langchain_embedder(self):
+        return OpenAIEmbeddings(model=self.model)

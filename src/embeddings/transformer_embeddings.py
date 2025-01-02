@@ -1,3 +1,4 @@
+from langchain_huggingface import HuggingFaceEmbeddings
 from transformers import AutoModel
 
 from src.embeddings.embeddings import Embeddings
@@ -12,3 +13,6 @@ class TransformerEmbeddings(Embeddings):
 
     def get_embedding(self, text):
         return self.model.encode(text)
+
+    def get_langchain_embedder(self):
+        return HuggingFaceEmbeddings(model_name=self.model_name)

@@ -1,31 +1,29 @@
 from data.birds_csv_loader import load_birds_csv
-from embeddings.chromadb_embedding_storage import ChromaDBEmbeddingStorage
+from embeddings.embedding_storage import EmbeddingStorage
+from embeddings.embeddings import Embeddings
 from utils.text_splitter import LangChainTextSplitter
 
-chroma_embedding_storage_name = "BirdsV1_lokal_hf_embedded"
 
-def build_birds_embeddings(use_chrome_embeddings: bool = True):
-    # load the birds dataset
-    df = load_birds_csv("data/raw/birds_datalist_de.csv")
+def build_birds_embeddings(
+        embedding_storage: EmbeddingStorage,
+        embedder: Embeddings = None,
+        csv_path: str = "data/raw/birds_datalist_de.csv",
+):
+    """
+    Builds embeddings from a birds CSV and stores them via the given embedding storage.
+    Instead of passing Document objects, this function embeds text chunks
+    and saves them as text->embedding pairs, which is compatible with both
+    ChromaDB and Neo4j backend storages.
+    """
+    df = load_birds_csv(csv_path).head(10)
 
-    # create the embeddings
-    birds = df.copy()
+    splitter = LangChainTextSplitter(embedder=embedder)
 
-    # Initialize text splitter
-    splitter = LangChainTextSplitter()
+    text_embedding_map = {}
+    for index, row in df.iterrows():
+        # For each bird, split into smaller segments
+        docs = splitter.get_recursive_character_chunks_from_text_file(bird_name=row["Vogelname"])
+        text_embedding_map[index] = docs
 
-    documents = []
-
-    # Textsplitter ausführen
-    for index, row in birds.iterrows():
-        document = splitter.get_recursive_character_chunks_from_text_file(bird_name=row['Vogelname'])
-        documents.append(document)
-
-    if use_chrome_embeddings is True:
-        # Create the embedding storage - ChromaDB
-        embedding_storage = ChromaDBEmbeddingStorage(chroma_embedding_storage_name)
-
-        # Save the embeddings
-        for document in documents:
-            # Save the embeddings in given storage
-            embedding_storage.add_documents(documents=document)
+    # Let the embedding storage handle saving
+    embedding_storage.save_embeddings(text_embedding_map)

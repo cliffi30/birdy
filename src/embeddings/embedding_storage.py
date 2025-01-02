@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List
 
+from langchain.schema import Document
+
 
 class EmbeddingStorage(ABC):
     @abstractmethod
-    def save_embeddings(self, embeddings_dict: Dict[str, List[float]]):
+    def save_embeddings(self, embeddings_dict: Dict[str, List[Document]]):
         """
         Saves the embeddings to the storage.
         """
@@ -19,14 +21,15 @@ class EmbeddingStorage(ABC):
         """
         pass
 
-    def get_embedding(self, text: str) -> List[float]:
+    def get_embedding(self, text: str, n_results: int) -> List[str]:
         """
         Retrieves the embedding for the given text.
 
         Args:
             text (str): The text to retrieve the embedding for.
+            n_results (int): The number of results to return.
 
         Returns:
-            List[float]: The embedding for the given text.
+            List[str]: The embeddings for the given text.
         """
         pass
