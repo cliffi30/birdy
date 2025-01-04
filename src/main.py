@@ -13,6 +13,7 @@ from models.ollama_completions import OllamaCompletions
 from models.openai_completions import OpenaiCompletions
 from utils.embeddings_helper import build_birds_embeddings
 from utils.sentiment_analyzer import SentimentAnalyzer
+from termcolor import colored
 
 
 class EmbeddingType(Enum):
@@ -22,7 +23,7 @@ class EmbeddingType(Enum):
 
 
 def main(use_llama_completions: bool = False, use_open_ai_completions: bool = True, use_embedding_type:EmbeddingType = EmbeddingType.Transformer,
-         use_chroma_embeddings: bool = False, recreate_embeddings: bool = False):
+         use_chroma_embeddings: bool = False, recreate_embeddings: bool = False, do_reasoning: bool = True):
 
     # initialize the config
     config = Config()
@@ -76,28 +77,62 @@ def main(use_llama_completions: bool = False, use_open_ai_completions: bool = Tr
             context = context + result.page_content + "/n"
 
         response = ""
-        print("-------Start question---------\n")
+
+        print(colored("-------Start question---------\n", "green", attrs=["bold"]))
         if use_open_ai_completions:
             response = openai_completions.get_completion(context, question, sentiment['label'], sentiment['score'])
-            print("--------------------\n")
-            print("Model: OpenAI")
-            print(f"Sentiment: {sentiment}\n")
-            print(f"Context: {context}\n")
-            print(f"Question: {question}\n")
-            print(f"Response: {response}\n")
-            print("--------------------\n\n")
+            print(colored("--------------------\n", "green"))
+            print(colored("Model: OpenAI", "white", attrs=["bold"]))
+            print_colored("Sentiment:", sentiment)
+            print_colored("Context:", context)
+            print_colored("Question:", question)
+            print_colored("Response:", response)
+            if do_reasoning:
+                reasoning(context, question, response)
+            print(colored("--------------------\n\n", "green"))
         if use_llama_completions:
             response = ollama_completions.get_completion(context, question)
-            print("--------------------\n")
-            print("Model: Ollama")
-            print(f"Sentiment: {sentiment}\n")
-            print(f"Context: {context}\n")
-            print(f"Question: {question}\n")
-            print(f"Response: {response}\n")
-            print("--------------------\n\n")
-        print("-------End questions---------\n")
+            print(colored("--------------------\n", "green"))
+            print(colored("Model: Ollama", "yellow", attrs=["bold"]))
+            print_colored("Sentiment:", sentiment)
+            print_colored("Context:", context)
+            print_colored("Question:", question)
+            print_colored("Response:", response)
+            if do_reasoning:
+                reasoning(context, question, response)
+            print(colored("--------------------\n\n", "green"))
+        print(colored("-------End question---------\n", "green", attrs=["bold"]))
 
-def str_to_bool(s): 
+
+def print_colored(header: str, text: str):
+    print(colored(header, "green", attrs=["bold"]))
+    print(f"\n{text}\n")
+
+def reasoning(context: str, question: str, answer: str):
+    """
+    Generates reasoning for a given context, question, and answer using OpenAI's API.
+    Args:
+        context (str): The context or background information related to the question.
+        question (str): The question that needs reasoning.
+        answer (str): The answer to the question for which reasoning is to be generated.
+    Returns:
+        None
+    """
+
+    # initialize the config
+    config = Config()
+
+    # create a client
+    client = OpenAI(api_key=config.openai_api_key)
+
+    openai_completions = OpenaiCompletions(client)
+    response = openai_completions.get_reasoning(context, question, answer)
+    print(f"Reasoning response:\n{response}")
+
+
+def str_to_bool(s):
+    if isinstance(s, bool):
+        return s
     return s.lower() in ['true', '1', 't', 'yes', 'y']
 
 if __name__ == "__main__":
@@ -120,6 +155,8 @@ if __name__ == "__main__":
                         help="True to recreate the embeddings")
     parser.add_argument("-chroma", "--useChromaDb", required=False, default=False,
                         help="True to use chromaDB as the embedding storage")
+    parser.add_argument("-rea", "--doReasoning", required=False, default=True,
+                        help="True to do reasoning for the completions")
 
     # Read arguments from command line
     args = parser.parse_args()
@@ -129,6 +166,7 @@ if __name__ == "__main__":
     print(f'useEmbeddingType: {args.useEmbeddingType}')
     print(f'recreateEmbeddings: {args.recreateEmbeddings}')
     print(f'useChromaDb: {args.useChromaDb}')
+    print(f'doReasoning: {args.doReasoning}')
 
     if (args.useLlamaCompletions == "false" and args.useOpenAiCompletions == "false"):
         print("At least one of the completion models should be enabled")
@@ -140,4 +178,5 @@ if __name__ == "__main__":
          use_open_ai_completions=str_to_bool(args.useOpenAiCompletions),
          use_embedding_type=embedding_type,
          use_chroma_embeddings=str_to_bool(args.useChromaDb), 
-         recreate_embeddings=str_to_bool(args.recreateEmbeddings))
+         recreate_embeddings=str_to_bool(args.recreateEmbeddings),
+         do_reasoning=str_to_bool(args.doReasoning))

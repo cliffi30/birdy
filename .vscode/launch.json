@@ -13,7 +13,15 @@
       "args": ["${command:pickArgs}"]
     },
     {
-      "name": "Python Debugger: chromaDB, openaiEmb, openaiCompl recreate",
+      "name": "Python Debugger: chromaDB, openaiEmb, openaiCompl",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "args": ["--useChromaDb=True", "--useEmbeddingType=openai", "--recreateEmbeddings=False"]
+    },
+    {
+      "name": "Python Debugger: chromaDB, openaiEmb, openaiCompl, recreate",
       "type": "debugpy",
       "request": "launch",
       "program": "${file}",

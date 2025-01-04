@@ -1,9 +1,9 @@
-from models.completions import Completion
 from openai import OpenAI
+from models.completions import Completion
 
 
 class OpenaiCompletions(Completion):
-    def __init__(self, client: OpenAI, model: str = "gpt-4o", max_tokens= 1000, temperature=0.5):
+    def __init__(self, client: OpenAI, model: str = "gpt-4o", max_tokens: int = 1000, temperature:float = 0.5):
         self.client = client
         self.model = model
         self.temperature = temperature
@@ -30,6 +30,19 @@ class OpenaiCompletions(Completion):
                 max_tokens=self.max_tokens,
                 messages=[
                     {"role": "system", "content": self.system_prompt},
+                    {"role": "user", "content": prompt}
+                ]
+            )
+        return completions.choices[0].message.content
+
+    def get_reasoning(self, context: str, question: str, answer: str) -> str:
+        prompt = f"Check if the answer is correct for the given context and question\n\nContext:{context}\n\nQuestion: {question}\nAnswer: {answer}"
+        #prompt = f"Context:{context}\n\nQuestion: {question}\nAnswer: {answer}"
+        completions = self.client.chat.completions.create(
+                model="o1-mini",
+                max_completion_tokens=10000,
+                messages=[
+                    #{"role": "developer", "content": developer_prompt}
                     {"role": "user", "content": prompt}
                 ]
             )
