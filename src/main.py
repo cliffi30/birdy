@@ -76,20 +76,29 @@ def main(use_llama_completions: bool = False, use_open_ai_completions: bool = Tr
             context = context + result.page_content + "/n"
 
         response = ""
-        print("--------------------")
-        if use_open_ai_completions == "true":
+        print("-------Start question---------\n")
+        if use_open_ai_completions:
             response = openai_completions.get_completion(context, question, sentiment['label'], sentiment['score'])
+            print("--------------------\n")
             print("Model: OpenAI")
-        if use_llama_completions == "true":
+            print(f"Sentiment: {sentiment}\n")
+            print(f"Context: {context}\n")
+            print(f"Question: {question}\n")
+            print(f"Response: {response}\n")
+            print("--------------------\n\n")
+        if use_llama_completions:
             response = ollama_completions.get_completion(context, question)
+            print("--------------------\n")
             print("Model: Ollama")
+            print(f"Sentiment: {sentiment}\n")
+            print(f"Context: {context}\n")
+            print(f"Question: {question}\n")
+            print(f"Response: {response}\n")
+            print("--------------------\n\n")
+        print("-------End questions---------\n")
 
-        print(f"Sentiment: {sentiment}")
-        print(f"Context: {context}")
-        print(f"Question: {question}")
-        print(f"Response: {response}")
-        print("--------------------\n\n")
-
+def str_to_bool(s): 
+    return s.lower() in ['true', '1', 't', 'yes', 'y']
 
 if __name__ == "__main__":
     # Initialize parser
@@ -127,6 +136,8 @@ if __name__ == "__main__":
 
     embedding_type = EmbeddingType(args.useEmbeddingType)
 
-    main(use_llama_completions=args.useLlamaCompletions, use_open_ai_completions=args.useOpenAiCompletions,
+    main(use_llama_completions=str_to_bool(args.useLlamaCompletions), 
+         use_open_ai_completions=str_to_bool(args.useOpenAiCompletions),
          use_embedding_type=embedding_type,
-         use_chroma_embeddings=args.useChromaDb, recreate_embeddings=args.recreateEmbeddings)
+         use_chroma_embeddings=str_to_bool(args.useChromaDb), 
+         recreate_embeddings=str_to_bool(args.recreateEmbeddings))
