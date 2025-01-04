@@ -105,10 +105,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Birdy - A bird shop assistant")
 
     # Adding optional argument
-    parser.add_argument("-lc", "--useLlamaCompletions", required=False, default="false",
-                        help="true to use llama with ollama to create completions")
-    parser.add_argument("-oac", "--useOpenAiCompletions", required=False, default="true",
-                        help="true to use OpenAI to create completions")
+    parser.add_argument("-lc", "--useLlamaCompletions", required=False, default=False,
+                        help="True to use llama with ollama to create completions")
+    parser.add_argument("-oac", "--useOpenAiCompletions", required=False, default=True,
+                        help="True to use OpenAI to create completions")
     
     # Embedding arguments
     parser.add_argument("-uet", "--useEmbeddingType", required=False, default=EmbeddingType.Transformer,
@@ -117,9 +117,9 @@ if __name__ == "__main__":
 
     # needs to be set to true if the embeddings should be recreated (needed for the first run)
     parser.add_argument("-re", "--recreateEmbeddings", required=False, default=False,
-                        help="true to recreate the embeddings")
+                        help="True to recreate the embeddings")
     parser.add_argument("-chroma", "--useChromaDb", required=False, default=False,
-                        help="true to use chromaDB as the embedding storage")
+                        help="True to use chromaDB as the embedding storage")
 
     # Read arguments from command line
     args = parser.parse_args()
