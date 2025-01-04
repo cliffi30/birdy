@@ -1,6 +1,7 @@
 import argparse
 import sys
 
+from enum import Enum
 from openai import OpenAI
 
 from config import Config
@@ -14,8 +15,15 @@ from utils.embeddings_helper import build_birds_embeddings
 from utils.sentiment_analyzer import SentimentAnalyzer
 
 
-def main(use_llama_completions: bool = False, use_open_ai_completions: bool = True, use_chroma_embeddings: bool = False,
-         recreate_embeddings: bool = False):
+class EmbeddingType(Enum):
+    Llama = "llama"
+    OpenAI = "openai"
+    Transformer = "transformer"
+
+
+def main(use_llama_completions: bool = False, use_open_ai_completions: bool = True, use_embedding_type:EmbeddingType = EmbeddingType.Transformer,
+         use_chroma_embeddings: bool = False, recreate_embeddings: bool = False):
+
     # initialize the config
     config = Config()
 
@@ -23,34 +31,33 @@ def main(use_llama_completions: bool = False, use_open_ai_completions: bool = Tr
     client = OpenAI(api_key=config.openai_api_key)
 
     # Prepare our possible embedders
-    openai_embeddings = OpenaiEmbeddings(client)
-    transformer_embeddings = TransformerEmbeddings()
-
-    embedder = transformer_embeddings
+    if use_embedding_type == EmbeddingType.OpenAI:
+        embedder = OpenaiEmbeddings(client)
+    elif use_embedding_type == EmbeddingType.Transformer:
+        embedder = TransformerEmbeddings()
 
     # Create the possible embedding storage (CSV, ChromaDB and Neo4j)
     # embedding_storage = CSVEmbeddingStorage('embeddings.csv')
-    chroma_db_client = ChromaDBEmbeddingStorage(embedder=embedder.get_langchain_embedder())
-    neo4j_storage = Neo4jEmbeddingStorage(
-        uri=config.neo4j_uri,
-        user=config.neo4j_user,
-        password=config.neo4j_password,
-        embedder=embedder.get_langchain_embedder()
-    )
     embedding_storage = None
     if use_chroma_embeddings:
-        embedding_storage = chroma_db_client
+        embedding_storage = ChromaDBEmbeddingStorage(embedder=embedder.get_langchain_embedder(), collection_name="birds_"+use_embedding_type.value)
     else:
-        embedding_storage = neo4j_storage
+        embedding_storage = Neo4jEmbeddingStorage(
+            uri=config.neo4j_uri,
+            user=config.neo4j_user,
+            password=config.neo4j_password,
+            embedder=embedder.get_langchain_embedder()
+        )
 
     if recreate_embeddings:
-        build_birds_embeddings(embedding_storage, embedder)
+        build_birds_embeddings(embedding_storage)
 
     questions = [
-        'What are the characteristics of the black bird?',
-        'Hi, You told me that the Eastern Bluebird is a small bird, but now the bird is huge! Why are you lying?',
+        "Was sind die Charakteristiken von einer Schwarzamsel?",
+        "Was sind die Charakteristiken von einer Amsel?",
+        "Hi, You told me that the Eastern Bluebird is a small bird, but now the bird is huge! Why are you lying?",
         "Ich bin richtig wütend. Ich habe einen Vogel gekauft und er ist nach wenigen Tagen bereits gestorben. Ich möchte Schadenersatz! Der seelische Schmerz ist unerträglich.",
-        "Ich muss schon sagen, die Qualität dieses Vogels mit dem langen roten Schnabel ist wirklich hervorragend. Es ist zwar etwas knapp für ihn im Käfig. Ich bin sehr zufrieden.",
+        "Ich muss schon sagen, die Qualität dieses Vogels mit dem langen roten Schnabel ist wirklich hervorragend. Es ist zwar etwas knapp für ihn im Käfig. Ich bin sehr zufrieden."
     ]
 
     if use_open_ai_completions:
@@ -64,7 +71,7 @@ def main(use_llama_completions: bool = False, use_open_ai_completions: bool = Tr
         sentiment = sentiment_analyzer.analyze_sentiment(question)
 
         context = ""
-        query_result = neo4j_storage.get_embedding(question, 3)
+        query_result = embedding_storage.get_embedding(question, 3)
         for result in query_result:
             context = context + result.page_content + "/n"
 
@@ -93,10 +100,12 @@ if __name__ == "__main__":
                         help="true to use llama with ollama to create completions")
     parser.add_argument("-oac", "--useOpenAiCompletions", required=False, default="true",
                         help="true to use OpenAI to create completions")
-    parser.add_argument("-le", "--useLlamaEmbeddings", required=False, default="false",
-                        help="true to use llama with ollama to create embeddings")
-    parser.add_argument("-oae", "--useOpenAiEmbeddings", required=False, default="true",
-                        help="true to use OpenAI to create embeddings")
+    
+    # Embedding arguments
+    parser.add_argument("-uet", "--useEmbeddingType", required=False, default=EmbeddingType.Transformer,
+                        choices=[EmbeddingType.Llama.value, EmbeddingType.OpenAI.value, EmbeddingType.Transformer.value],
+                        help="Select which embedding model to use")
+
     # needs to be set to true if the embeddings should be recreated (needed for the first run)
     parser.add_argument("-re", "--recreateEmbeddings", required=False, default=False,
                         help="true to recreate the embeddings")
@@ -108,17 +117,16 @@ if __name__ == "__main__":
 
     print(f'useLlamaCompletions: {args.useLlamaCompletions}')
     print(f'useOpenAiCompletions: {args.useOpenAiCompletions}')
-    print(f'useLlamaEmbeddings: {args.useLlamaEmbeddings}')
-    print(f'useOpenAiEmbeddings: {args.useOpenAiEmbeddings}')
+    print(f'useEmbeddingType: {args.useEmbeddingType}')
     print(f'recreateEmbeddings: {args.recreateEmbeddings}')
     print(f'useChromaDb: {args.useChromaDb}')
 
     if (args.useLlamaCompletions == "false" and args.useOpenAiCompletions == "false"):
         print("At least one of the completion models should be enabled")
         sys.exit(1)
-    if (args.useLlamaEmbeddings == "false" and args.useOpenAiEmbeddings == "false"):
-        print("At least one of the embedding models should be enabled")
-        sys.exit(2)
+
+    embedding_type = EmbeddingType(args.useEmbeddingType)
 
     main(use_llama_completions=args.useLlamaCompletions, use_open_ai_completions=args.useOpenAiCompletions,
+         use_embedding_type=embedding_type,
          use_chroma_embeddings=args.useChromaDb, recreate_embeddings=args.recreateEmbeddings)

@@ -9,10 +9,9 @@ from langchain_community.document_loaders import TextLoader
 
 
 class LangChainTextSplitter:
-    def __init__(self, embedder: Embeddings = None, ):
+    def __init__(self):
         # set base Path
         self.base_dir = pathlib.Path(__file__).parent.resolve()
-        self.embedder = embedder
 
         # split documents into text and embeddings
         self.text_splitter = RecursiveCharacterTextSplitter(
@@ -60,7 +59,7 @@ class LangChainTextSplitter:
 
         # This is a long document we can split up.
         # load PdfFile
-        text_loader = TextLoader(data_file_path)
+        text_loader = TextLoader(data_file_path, encoding="utf-8")
         documents = text_loader.load()
 
         # Create documents using LangChain's create_documents method

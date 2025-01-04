@@ -39,8 +39,9 @@ class ChromaDBEmbeddingStorage(EmbeddingStorage):
         self.chunk_overlap = chunk_overlap
 
     def save_embeddings(self, embeddings_dict: Dict[str, List[Document]]):
-        uuids = [str(uuid4()) for _ in range(len(embeddings_dict))]
-        self.vector_store.add_documents(filter_complex_metadata(embeddings_dict.values()), ids=uuids)
+        # Iterate through the dictionary 
+        for key, documents in embeddings_dict.items():
+            self.vector_store.add_documents(filter_complex_metadata(documents))
         self.client.get_or_create_collection(self.collection_name)
 
     # Speichert LangChain Documents in der Datenbank als Embeddings ab

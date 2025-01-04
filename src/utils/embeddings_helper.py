@@ -6,7 +6,6 @@ from utils.text_splitter import LangChainTextSplitter
 
 def build_birds_embeddings(
         embedding_storage: EmbeddingStorage,
-        embedder: Embeddings = None,
         csv_path: str = "data/raw/birds_datalist_de.csv",
 ):
     """
@@ -17,7 +16,7 @@ def build_birds_embeddings(
     """
     df = load_birds_csv(csv_path).head(10)
 
-    splitter = LangChainTextSplitter(embedder=embedder)
+    splitter = LangChainTextSplitter()
 
     text_embedding_map = {}
     for index, row in df.iterrows():
