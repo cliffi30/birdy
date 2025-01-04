@@ -101,7 +101,7 @@ if __name__ == "__main__":
     parser.add_argument("-re", "--recreateEmbeddings", required=False, default=False,
                         help="true to recreate the embeddings")
     parser.add_argument("-chroma", "--useChromaDb", required=False, default=False,
-                        help="true to recreate the embeddings")
+                        help="true to use chromaDB as the embedding storage")
 
     # Read arguments from command line
     args = parser.parse_args()
@@ -111,6 +111,7 @@ if __name__ == "__main__":
     print(f'useLlamaEmbeddings: {args.useLlamaEmbeddings}')
     print(f'useOpenAiEmbeddings: {args.useOpenAiEmbeddings}')
     print(f'recreateEmbeddings: {args.recreateEmbeddings}')
+    print(f'useChromaDb: {args.useChromaDb}')
 
     if (args.useLlamaCompletions == "false" and args.useOpenAiCompletions == "false"):
         print("At least one of the completion models should be enabled")

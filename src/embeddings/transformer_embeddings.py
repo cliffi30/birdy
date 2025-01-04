@@ -1,7 +1,7 @@
 from langchain_huggingface import HuggingFaceEmbeddings
 from transformers import AutoModel
 
-from src.embeddings.embeddings import Embeddings
+from embeddings.embeddings import Embeddings
 
 
 # generates the embeddings using a model from the Hugging Face Transformers library
