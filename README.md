@@ -19,10 +19,3 @@ Wir sind eine auf Vögel spezialisierte Tierhandlung - Datengenerierung via “o
 **Optional:**
 Damit keine sensitiven Daten nach aussen gelangen, soll die nötige Infrastruktur und persönlichen Daten lokal verfügbar sein.
 
-## Usage
-
-### Install packages with conda
-
-````bash
-conda install --yes --file requirements.txt
-````
