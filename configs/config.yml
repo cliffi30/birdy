@@ -1,3 +1,8 @@
+# It is a really bad security practice to put keys and passwords in a plain text file (especially risky as an accidental git commit is almost impossible to delete)
+# The recommended approach for OpenAI is to use a system variable for example on Mac/Linux something like this:
+#     export OPENAI_API_KEY="sk-proj-...."
+# On Windows use:
+#     set OPENAI_API_KEY=sk-proj...
 openai:
     api_key:
 neo4j:

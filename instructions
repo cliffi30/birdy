@@ -1,0 +1,50 @@
+# Installation instructions
+
+# Create conda environment and force python to v3.10
+conda create -n birdy python==3.10 -y
+conda activate birdy
+
+# Fix illegal characters in requirements file and filter for those that need conda and those that need pip to install
+cat requirements.txt | grep -v langchain | grep -v ollama | grep -v neo4j | grep -v torch | sed 's/~=/==/g' > reqconda.txt
+cat requirements.txt | grep -e 'langchain\|ollama\|neo4j' | sed 's/~=/==/g' > reqpip.txt
+
+# Add the required channels to conda
+conda config --append channels conda-forge
+conda config --append channels bioconda
+conda config --append channels defaults
+
+# Install the first batch of dependencies
+conda install --yes --file reqconda.txt
+
+# Add pip to conda and install the second batch
+conda install pip -y
+pip install -r reqpip.txt
+
+# Install pytorch
+pip install torch torchvision torchaudio
+
+# Prepare Docker
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Download Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Enable Docker Service
+sudo systemctl enable docker
+sudo systemctl start docker
+
+# Add user to the Docker group
+sudo usermod -aG docker $USER
+
+# Start birdy... Pick one:
+## Start birdy with chroma
+docker-compose -f docker-compose-chroma.yml up
+
+## Start birdy with neo4j
+docker-compose -f docker-compose-neo4j.yml up
+
+# Open the webpage http://localhost:8000 and hopefully it will do something
