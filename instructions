@@ -1,0 +1,24 @@
+# Installation instructions
+
+# Create conda environment and force python to v3.10
+conda create -n birdy python==3.10 -y
+conda activate birdy
+
+# Fix illegal characters in requirements file and filter for those that need conda and those that need pip to install
+cat requirements.txt | grep -v langchain | grep -v ollama | grep -v neo4j | grep -v torch | sed 's/~=/==/g' > reqconda.txt
+cat requirements.txt | grep -e 'langchain\|ollama\|neo4j' | sed 's/~=/==/g' > reqpip.txt
+
+# Add the required channels to conda
+conda config --append channels conda-forge
+conda config --append channels bioconda
+conda config --append channels defaults
+
+# Install the first batch of dependencies
+conda install --yes --file reqconda.txt
+
+# Add pip to conda and install the second batch
+conda install pip -y
+pip install -r reqpip.txt
+
+# Install pytorch (see https://pytorch.org/get-started/locally/)
+pip install torch torchvision torchaudio
