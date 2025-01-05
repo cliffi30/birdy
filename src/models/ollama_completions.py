@@ -12,6 +12,7 @@ class OllamaCompletions(Completion):
         self.model = model
         self.temperature = temperature
         self.max_tokens = max_tokens
+        self.reasioning_model = "qwq"
 
         self.system_prompt = '''You are a sales assistant with the name Horst Adler in a birds shop. Follow these guidelines:
                         - Respond like in a mail conversation
@@ -49,3 +50,18 @@ class OllamaCompletions(Completion):
         ])
         '''
         return response.message.content
+    
+
+    def get_reasoning(self, context: str, question: str, answer: str) -> str:
+        prompt = f"Check if the answer is correct for the given context and question and reason about it.\n\nContext:{context}\n\nQuestion: {question}\nAnswer: {answer}"
+        #prompt = f"Context:{context}\n\nQuestion: {question}\nAnswer: {answer}"
+        response: ChatResponse = chat(model=self.reasioning_model, messages=[
+                    #{"role": "developer", "content": developer_prompt}
+                    {"role": "user", "content": prompt}
+                ]
+            )
+        return response.message.content
+    
+    def get_reasoning_model(self) -> str:
+        return f"Ollama: {self.reasioning_model}"
+    

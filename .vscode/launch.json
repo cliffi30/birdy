@@ -29,12 +29,12 @@
       "args": ["--useChromaDb=True", "--useEmbeddingType=openai", "--recreateEmbeddings=True"]
     },
     {
-      "name": "Python Debugger: chromaDB, openaiEmb, llamaCompl",
+      "name": "Python Debugger: chromaDB, openaiEmb, llamaCompl, doQwqReasoning",
       "type": "debugpy",
       "request": "launch",
       "program": "${file}",
       "console": "integratedTerminal",
-      "args": ["--useChromaDb=True", "--useEmbeddingType=openai", "--recreateEmbeddings=False", "--useLlamaCompletions=True"]
+      "args": ["--useChromaDb=True", "--useEmbeddingType=openai", "--recreateEmbeddings=False", "--useLlamaCompletions=True", "--doQwqReasoning=True"]
     },
     {
       "name": "Python Debugger: chromaDB, transformerEmb, recreate",

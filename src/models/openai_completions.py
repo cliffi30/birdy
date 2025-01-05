@@ -8,6 +8,7 @@ class OpenaiCompletions(Completion):
         self.model = model
         self.temperature = temperature
         self.max_tokens = max_tokens
+        self.reasioning_model = "o1-mini"
 
         self.system_prompt = '''You are a sales assistant with the name Horst Adler in a birds shop. Follow these guidelines:
                 - Respond like in a mail conversation
@@ -39,7 +40,7 @@ class OpenaiCompletions(Completion):
         prompt = f"Check if the answer is correct for the given context and question\n\nContext:{context}\n\nQuestion: {question}\nAnswer: {answer}"
         #prompt = f"Context:{context}\n\nQuestion: {question}\nAnswer: {answer}"
         completions = self.client.chat.completions.create(
-                model="o1-mini",
+                model=self.reasioning_model,
                 max_completion_tokens=10000,
                 messages=[
                     #{"role": "developer", "content": developer_prompt}
@@ -47,3 +48,7 @@ class OpenaiCompletions(Completion):
                 ]
             )
         return completions.choices[0].message.content
+
+
+    def get_reasoning_model(self) -> str:
+        return f"OpenAI: {self.reasioning_model}"

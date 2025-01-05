@@ -17,3 +17,30 @@ class Completion(ABC):
             str: The generated text completion.
         """
         pass
+
+
+    @abstractmethod
+    def get_reasoning(self, context: str, question: str, answer: str) -> str:
+        """
+        Generates reasoning for a given context, question, and answer.
+
+        Args:
+            self (Completion): The completion instance.
+            context (str): The context or background information related to the question.
+            question (str): The question that needs reasoning.
+            answer (str): The answer to the question for which reasoning is to be generated.
+
+        Returns:
+            str: The generated reasoning.
+        """
+        pass
+
+    @abstractmethod
+    def get_reasoning_model(self) -> str:
+        """
+        Retrieves the reasoning model.
+        Returns:
+            str: The name or identifier of the reasoning model.
+        """
+        
+        pass
