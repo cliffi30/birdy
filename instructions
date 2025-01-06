@@ -23,6 +23,7 @@ conda install --yes --file reqconda.txt
 # Add pip to conda and install the second batch
 conda install pip -y
 pip install -r reqpip.txt
+pip install PyMuPDF
 
 # Install pytorch
 pip install torch torchvision torchaudio
