@@ -6,7 +6,7 @@ from langchain.schema import Document
 
 class EmbeddingStorage(ABC):
     @abstractmethod
-    def save_embeddings(self, embeddings_dict: Dict[str, List[Document]]):
+    def save_embeddings(self, embeddings: List[List[Document]]):
         """
         Saves the embeddings to the storage.
         """

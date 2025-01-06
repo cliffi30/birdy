@@ -38,11 +38,11 @@ class Neo4jEmbeddingStorage(EmbeddingStorage):
             text_node_properties=text_node_properties,
         )
 
-    def save_embeddings(self, embeddings_dict: Dict[str, List[Document]]):
+    def save_embeddings(self, embeddings: List[List[Document]]):
         """
         Save documents and their embeddings to Neo4j using vector index.
         """
-        for _, docs in embeddings_dict.items():
+        for docs in embeddings:
             self.existing_graph.add_documents(docs)
 
     def get_all_embeddings(self) -> Dict[str, List[float]]:

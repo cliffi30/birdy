@@ -1,6 +1,9 @@
 '''This module is responsible for generating completions using the Ollama API
    see https://github.com/ollama/ollama/tree/main/docs for more information
 '''
+from typing import Tuple
+
+from PIL.ImageFile import ImageFile
 from models.completions import Completion
 from ollama import ChatResponse
 from ollama import chat
@@ -24,8 +27,9 @@ class OllamaCompletions(Completion):
                         - If the prompt includes a question to specify a bird use the name of the birds from the context
                         - Be precise and factual'''
 
-    def get_completion(self, context: str, question: str, sentiment_label: str = None,
-                       sentiment_score: float = None) -> str:
+    def get_completion(self, context: str, relevant_images: [dict], question: str, sentiment_label: str = None,
+                       sentiment_score: float = None) -> Tuple[str, ImageFile]:
+        # todo: relevant images are not used in the completion
         prompt = f"Context:{context}\n\nQuestion: {question}\nAnswer:"
         if sentiment_label is not None and sentiment_score is not None:
             # provide the sentiment information to the model
@@ -49,7 +53,7 @@ class OllamaCompletions(Completion):
         }
         ])
         '''
-        return response.message.content
+        return response.message.content, []
     
 
     def get_reasoning(self, context: str, question: str, answer: str) -> str:

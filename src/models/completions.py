@@ -1,20 +1,25 @@
 from abc import ABC, abstractmethod
+from typing import Tuple
+
+from PIL.ImageFile import ImageFile
+
 
 class Completion(ABC):
     @abstractmethod
-    def get_completion(self, context: str, question: str, sentiment_label: str = None, sentiment_score: float = None) -> str:
+    def get_completion(self, context: str, relevant_images: [dict], question: str, sentiment_label: str = None, sentiment_score: float = None) -> Tuple[str, ImageFile]:
         """
         Generates a text completion for the given prompt.
 
         Args:
             self (Completion): The completion instance.
             context (str): The context to generate a completion for.
+            relevant_images (List[dict]): The relevant images to include in the completion.
             question (str): The question to generate a completion for.
             sentiment_label (str): The sentiment label for the prompt.
             sentiment_score (float): The sentiment score for the prompt.
 
         Returns:
-            str: The generated text completion.
+            Tuple[str, ImageFile]: The generated text completion including relevant images.
         """
         pass
 
