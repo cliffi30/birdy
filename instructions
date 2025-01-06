@@ -1,5 +1,9 @@
 # Installation instructions
 
+# Clone repo
+git clone https://cliffi30@bitbucket.org/fachhochschule/birdy.git
+cd birdy
+
 # Create conda environment and force python to v3.10
 conda create -n birdy python==3.10 -y
 conda activate birdy
@@ -23,7 +27,16 @@ pip install -r reqpip.txt
 # Install pytorch
 pip install torch torchvision torchaudio
 
-# Prepare Docker
+# Set up OpenAI
+## Navigate to https://platform.openai.com/account/billing
+## Pay at least $10 to OpenAI and create an API key
+### The API key has a format like "sk-proj-..." you need to set this as a system variable. The easiest way in a "linux-like" environment is to put this into your .bashrc file with the command:
+### export OPENAI_API_KEY="sk-proj-..."
+### Then start a new terminal or source your .bashrc file
+
+## Go to the "limits" tab and click at least "o1-mini" and hit "save" (this is the default model)
+
+# Prepare Docker (neo4J is required and it is accessed via Docker for simplicity)
 sudo apt update
 sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -40,11 +53,315 @@ sudo systemctl start docker
 # Add user to the Docker group
 sudo usermod -aG docker $USER
 
-# Start birdy... Pick one:
-## Start birdy with chroma
-docker-compose -f docker-compose-chroma.yml up
-
-## Start birdy with neo4j
+# Start birdy with neo4j
 docker-compose -f docker-compose-neo4j.yml up
 
-# Open the webpage http://localhost:8000 and hopefully it will do something
+# Finally start the main.py script (make sure that you have the neo4j docker running in a terminal)
+python src/main.py
+
+############# ------------------------------ ##############
+
+# If all goes well you should see something like this on the screen:
+useLlamaCompletions: False
+useOpenAiCompletions: True
+useEmbeddingType: EmbeddingType.Transformer
+recreateEmbeddings: False
+useChromaDb: False
+doReasoning: True
+-------Start question---------
+
+--------------------
+
+Model: OpenAI
+Sentiment:
+
+{'label': 'neutral', 'score': 0.7870072722434998}
+
+Context:
+
+
+
+Question:
+
+Was sind die Charakteristiken von einer Schwarzamsel?
+
+Response:
+
+Sehr geehrter Kunde,
+
+vielen Dank für Ihre Anfrage bezüglich der Schwarzamsel. Leider habe ich in den bereitgestellten Informationen keine spezifischen Details zu den Charakteristiken der Schwarzamsel gefunden. Allgemein kann ich Ihnen jedoch mitteilen, dass die Schwarzamsel, auch Amsel genannt, bekannt ist für ihr schwarzes Gefieder beim Männchen und das braune Gefieder beim Weibchen. Sie sind oft in Gärten und Wäldern anzutreffen und bekannt für ihren melodischen Gesang.
+
+Für genauere Informationen empfehle ich, spezialisierte Literatur oder ornithologische Quellen zu konsultieren.
+
+Mit freundlichen Grüßen,
+
+Horst Adler  
+Vogelgeschäfts-Assistent
+
+Reasoning response:
+Ja, die gegebene Antwort ist grundsätzlich korrekt und angemessen im Hinblick auf die gestellte Frage nach den Charakteristiken einer Schwarzamsel. Hier sind einige Punkte zur Bewertung:
+
+1. **Plumage-Unterschiede:**
+   - **Richtig:** Die Antwort erwähnt korrekt, dass das Männchen ein schwarzes Gefieder und das Weibchen ein braunes Gefieder hat. Dies entspricht den tatsächlichen Unterschieden zwischen den Geschlechtern der Amsel.
+
+2. **Lebensraum:**
+   - **Richtig:** Die Angabe, dass Schwarzamseln oft in Gärten und Wäldern anzutreffen sind, ist zutreffend und beschreibt typische Lebensräume dieser Vögel.
+
+3. **Gesang:**
+   - **Richtig:** Die Beschreibung der Amsel als bekannt für ihren melodischen Gesang stimmt mit den beobachteten Verhaltensweisen überein.
+
+4. **Form und Tonfall der Antwort:**
+   - **Angemessen:** Die Antwort ist in Form eines höflichen Geschäftsbriefs gehalten, was passend ist, wenn es sich um eine Kundenanfrage handelt.
+   - **Hilfestellung:** Es wird sinnvoll darauf hingewiesen, bei Bedarf spezialisierte Literatur oder ornithologische Quellen zu konsultieren, um detailliertere Informationen zu erhalten.
+
+5. **Vollständigkeit:**
+   - **Verbesserungspotenzial:** Obwohl die Antwort korrekt ist, könnten weitere Charakteristiken ergänzt werden, um ein umfassenderes Bild der Schwarzamsel zu bieten. Dazu gehören beispielsweise:
+     - **Verhalten:** Informationen zu Brutverhalten, Nahrungssuche oder Sozialverhalten.
+     - **Fortpflanzung:** Details zur Nestbauweise und Brutzeit.
+     - **Verbreitung:** Geographische Verbreitung und Habitatpräferenzen.
+
+**Fazit:** Die Antwort ist korrekt und bietet eine angemessene Grundlage für allgemeine Informationen über die Schwarzamsel. Für eine umfassendere Beantwortung der Frage könnten zusätzliche Details zu Verhalten, Fortpflanzung und Verbreitung ergänzt werden. Insgesamt erfüllt die Antwort jedoch die grundlegenden Anforderungen und ist für eine allgemeine Kundenanfrage geeignet.
+--------------------
+
+
+-------End question---------
+
+-------Start question---------
+
+--------------------
+
+Model: OpenAI
+Sentiment:
+
+{'label': 'neutral', 'score': 0.7944024801254272}
+
+Context:
+
+
+
+Question:
+
+Was sind die Charakteristiken von einer Amsel?
+
+Response:
+
+Sehr geehrter Kunde,
+
+vielen Dank für Ihre Anfrage bezüglich der Charakteristiken einer Amsel. Leider habe ich im Moment keine spezifischen Informationen zu den Charakteristiken einer Amsel in meinem aktuellen Datenbestand. Amseln sind jedoch allgemein bekannt für ihren melodischen Gesang und ihre Anpassungsfähigkeit an verschiedene Lebensräume.
+
+Sollten Sie weitere Fragen haben oder spezifische Informationen benötigen, stehe ich Ihnen gerne zur Verfügung.
+
+Mit freundlichen Grüßen,
+
+Horst Adler  
+Vogelhandlung
+
+Reasoning response:
+Die gegebene Antwort auf die Frage „Was sind die Charakteristiken von einer Amsel?“ ist teilweise korrekt, aber nicht vollständig zufriedenstellend. Hier eine detaillierte Analyse:
+
+1. **Richtige Informationen:**
+   - **Melodischer Gesang:** Es stimmt, dass Amseln für ihren melodischen Gesang bekannt sind.
+   - **Anpassungsfähigkeit:** Amseln sind anpassungsfähig und kommen in verschiedenen Lebensräumen vor, was ebenfalls korrekt ist.
+
+2. **Unvollständigkeit und Ton:**
+   - **Fehlende Spezifität:** Die Antwort gibt an, dass keine spezifischen Informationen verfügbar sind, was die Nützlichkeit der Antwort einschränkt.
+   - **Kundenservice-Ton:** Die formelle Briefstruktur ist möglicherweise nicht die beste Wahl für eine direkte Beantwortung einer Wissensfrage. Eine präzisere und informativere Antwort wäre hilfreicher.
+
+3. **Empfehlung für eine vollständige Antwort:**
+   Um die Frage umfassend zu beantworten, sollten zusätzliche charakteristische Merkmale der Amsel genannt werden, wie zum Beispiel:
+   - **Aussehen:** Schlanker Körper, schwarze bis dunkelbraune Färbung bei Männchen, braun-grau bei Weibchen.
+   - **Lebensraum:** Bevorzugt Laub- und Mischwälder, Gärten und Parks.
+   - **Ernährung:** Vielseitig, ernähren sich von Insekten, Würmern, Beeren und Früchten.
+   - **Verhalten:** Oft in Paaren oder kleinen Gruppen, brütet in dichten Büschen.
+   - **Fortpflanzung:** Ein- bis zweimal jährlich brütend, mit einem Gelege von meist 3-5 Eiern.
+
+**Zusammenfassung:** Die Antwort liefert einige korrekte Informationen, bleibt jedoch zu vage und formal. Eine ausführlichere und spezifischere Antwort wäre hilfreicher und vollständiger für die gestellte Frage.
+--------------------
+
+
+-------End question---------
+
+-------Start question---------
+
+--------------------
+
+Model: OpenAI
+Sentiment:
+
+{'label': 'negative', 'score': 0.8110474944114685}
+
+Context:
+
+
+
+Question:
+
+Hi, You told me that the Eastern Bluebird is a small bird, but now the bird is huge! Why are you lying?
+
+Response:
+
+Dear Customer,
+
+Thank you for reaching out. I apologize for any confusion regarding the size of the Eastern Bluebird. The Eastern Bluebird (Sialia sialis) is indeed considered a small bird, typically measuring about 16-21 cm in length (Source: Birds_of_North_America, Page: 45). If your bird appears significantly larger, it may be due to a different species or a misunderstanding. Please feel free to provide more details or images, and I would be happy to assist further.
+
+Kind regards,
+
+Horst Adler
+
+Reasoning response:
+The provided answer is **generally correct and appropriate** for the given context and question. Here's an analysis of its components:
+
+1. **Tone and Professionalism:**
+   - The response maintains a **polite and professional tone**, which is suitable for addressing a concerned or frustrated customer.
+   - Phrases like "Thank you for reaching out" and "Kind regards" contribute to a respectful and empathetic communication style.
+
+2. **Accuracy of Information:**
+   - The **Eastern Bluebird (Sialia sialis)** is accurately described as a **small bird**, typically measuring about **16-21 cm in length**. This aligns with ornithological data.
+   
+3. **Addressing the Concern:**
+   - The answer acknowledges the customer's confusion and **apologizes for any misunderstanding**, which is essential in customer service.
+   - It offers possible explanations, such as the possibility of a **different species** or a **misunderstanding**, which are logical considerations if the observed bird appears larger.
+   
+4. **Offering Further Assistance:**
+   - The invitation to provide **more details or images** demonstrates a willingness to **investigate further** and assist the customer, fostering trust and satisfaction.
+
+5. **Citation of Source:**
+   - Mentioning a source like "**Birds_of_North_America, Page: 45**" adds credibility. However, ensure that the cited source is accurate and verifiable. If "Birds_of_North_America" is a placeholder or not an actual publication, it might be misleading. Consider citing a well-known and reputable source, such as a specific field guide or ornithological journal, for added reliability.
+
+**Recommendations for Improvement:**
+
+- **Clarify the Source:** If possible, provide a more specific or widely recognized source to enhance credibility. For example:
+  > "...typically measuring about 16-21 cm in length (Source: *The Sibley Guide to Birds*, Page 45)."
+
+- **Provide Additional Information:** Offering a brief explanation about variation in size among birds or the existence of similar larger species might preempt further confusion. For example:
+  > "It's also worth noting that juvenile Eastern Bluebirds may appear slightly larger, and there are other bluebird species that are similar in appearance but may vary in size."
+
+Overall, the answer effectively addresses the customer's concern with accurate information and a supportive tone.
+--------------------
+
+
+-------End question---------
+
+-------Start question---------
+
+--------------------
+
+Model: OpenAI
+Sentiment:
+
+{'label': 'negative', 'score': 0.9338729381561279}
+
+Context:
+
+
+
+Question:
+
+Ich bin richtig wütend. Ich habe einen Vogel gekauft und er ist nach wenigen Tagen bereits gestorben. Ich möchte Schadenersatz! Der seelische Schmerz ist unerträglich.
+
+Response:
+
+Sehr geehrte/r Kunde/in,
+
+es tut mir sehr leid zu hören, dass Ihr Vogel verstorben ist. Ich kann Ihren Ärger und Schmerz gut nachvollziehen und möchte Ihnen gerne weiterhelfen.
+
+Bitte kontaktieren Sie uns direkt im Geschäft oder telefonisch, damit wir den Vorfall genauer untersuchen und eine angemessene Lösung für Sie finden können. Es ist uns wichtig, dass Sie mit Ihrem Kauf zufrieden sind, und wir werden unser Bestes tun, um die Situation zu klären.
+
+Vielen Dank für Ihr Verständnis und Ihre Geduld.
+
+Mit freundlichen Grüßen,
+
+Horst Adler  
+Vogelgeschäft
+
+Reasoning response:
+Ja, die gegebene Antwort ist im Allgemeinen korrekt und angemessen für den vorliegenden Kontext und die gestellte Frage. Hier sind einige Punkte zur Bewertung:
+
+### **Stärken der Antwort:**
+
+1. **Empathie und Verständnis:**
+   - Die Antwort beginnt mit einer aufrichtigen Entschuldigung („es tut mir sehr leid zu hören...“) und zeigt Verständnis für die Gefühle des Kunden („Ich kann Ihren Ärger und Schmerz gut nachvollziehen“). Dies ist wichtig, um die emotionale Lage des Kunden anzuerkennen.
+
+2. **Professioneller Ton:**
+   - Die Antwort ist höflich und respektvoll formuliert, was zur Aufrechterhaltung einer professionellen Kundenbeziehung beiträgt.
+
+3. **Konkrete Handlungsaufforderung:**
+   - Der Hinweis, sich direkt im Geschäft oder telefonisch zu melden, zeigt Bereitschaft zur Lösung und signalisiert, dass das Unternehmen die Angelegenheit ernst nimmt.
+
+4. **Versicherung der Bemühungen:**
+   - Die Zusicherung („wir werden unser Bestes tun, um die Situation zu klären“) vermittelt dem Kunden, dass das Unternehmen aktiv an einer Lösung arbeiten wird.
+
+### **Mögliche Verbesserungen:**
+
+1. **Klarstellung der nächsten Schritte:**
+   - Es könnte hilfreich sein, dem Kunden eine genauere Vorstellung davon zu geben, was er erwarten kann, wenn er sich meldet. Beispielsweise könnten Informationen zu möglichen Entschädigungsmaßnahmen oder dem weiteren Ablauf angegeben werden.
+
+2. **Kontaktinformationen bereitstellen:**
+   - Obwohl der Text darauf hinweist, sich zu melden, fehlen konkrete Kontaktinformationen wie Telefonnummer oder E-Mail-Adresse. Eine einfache Hinzufügung wie „Sie erreichen uns unter der Nummer xxx-xxxxxxx oder per E-Mail an kontakt@vogelgeschäft.de“ könnte den Prozess für den Kunden erleichtern.
+
+3. **Zeitlicher Rahmen:**
+   - Ein Hinweis darauf, wie schnell das Unternehmen reagieren wird, könnte dem Kunden zusätzliche Sicherheit geben („Wir werden uns innerhalb von 48 Stunden bei Ihnen melden“).
+
+4. **Rechtsgrundlage erwähnen (falls zutreffend):**
+   - Falls Unternehmensrichtlinien oder gesetzliche Bestimmungen zur Schadensregulierung existieren, könnte eine kurze Erwähnung des weiteren Vorgehens dazu beitragen, Transparenz zu schaffen.
+
+### **Beispiel für eine leicht überarbeitete Antwort:**
+
+---
+
+**Sehr geehrte/r Kunde/in,**
+
+es tut mir sehr leid zu hören, dass Ihr Vogel verstorben ist. Ich kann Ihren Ärger und Schmerz gut nachvollziehen und möchte Ihnen gerne weiterhelfen.
+
+Bitte kontaktieren Sie uns direkt in unserem Geschäft oder telefonisch unter xxx-xxxxxxx, damit wir den Vorfall genauer untersuchen und eine angemessene Lösung für Sie finden können. Wir werden uns bemühen, innerhalb von 48 Stunden mit einer Rückmeldung auf Sie zuzukommen.
+
+Es ist uns wichtig, dass Sie mit Ihrem Kauf zufrieden sind, und wir werden unser Bestes tun, um die Situation zu klären.
+
+Vielen Dank für Ihr Verständnis und Ihre Geduld.
+
+Mit freundlichen Grüßen,
+
+Horst Adler  
+Vogelgeschäft
+
+---
+
+### **Fazit:**
+
+Die ursprüngliche Antwort ist bereits gut strukturiert und adressiert die wesentlichen Anliegen des Kunden. Durch kleine Ergänzungen wie konkrete Kontaktinformationen und einen klareren Hinweis auf den weiteren Ablauf kann die Antwort noch hilfreicher und kundenfreundlicher gestaltet werden.
+--------------------
+
+
+-------End question---------
+
+-------Start question---------
+
+--------------------
+
+Model: OpenAI
+Sentiment:
+
+{'label': 'positive', 'score': 0.9174002408981323}
+
+Context:
+
+
+
+Question:
+
+Ich muss schon sagen, die Qualität dieses Vogels mit dem langen roten Schnabel ist wirklich hervorragend. Es ist zwar etwas knapp für ihn im Käfig. Ich bin sehr zufrieden.
+
+Response:
+
+Sehr geehrter Kunde,
+
+vielen Dank für Ihr positives Feedback! Es freut mich sehr zu hören, dass Sie mit der Qualität des Vogels mit dem langen roten Schnabel zufrieden sind. Falls Sie bezüglich der Käfiggröße Unterstützung benötigen oder Fragen haben, stehe ich Ihnen gerne zur Verfügung. Wir möchten sicherstellen, dass Ihr Vogel ein komfortables Zuhause hat.
+
+Mit freundlichen Grüßen,
+
+Horst Adler  
+Vogelgeschäft-Assistent
+
+
+
+
