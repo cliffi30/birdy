@@ -1,7 +1,7 @@
 # Installation instructions
 
 # Clone repo
-git clone https://cliffi30@bitbucket.org/fachhochschule/birdy.git
+git clone https://github.com/cliffi30/birdy
 cd birdy
 
 # Create conda environment and force python to v3.10
